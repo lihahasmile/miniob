@@ -20,8 +20,7 @@ See the Mulan PSL v2 for more details. */
 /*
  *
  */
-class LogTest
-{
+class LogTest {
 public:
   LogTest();
   virtual ~LogTest();

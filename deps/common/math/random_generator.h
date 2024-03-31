@@ -14,14 +14,13 @@ See the Mulan PSL v2 for more details. */
 #ifndef __COMMON_MATH_RANDOM_GENERATOR_H_
 #define __COMMON_MATH_RANDOM_GENERATOR_H_
 
-#include <random>
 #include <stdlib.h>
+#include <random>
 namespace common {
 
 #define DEFAULT_RANDOM_BUFF_SIZE 512
 
-class RandomGenerator
-{
+class RandomGenerator {
 
 public:
   RandomGenerator();

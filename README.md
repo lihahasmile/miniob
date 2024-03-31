@@ -1,13 +1,22 @@
-<div align="center">
+# 修改记录
+2024.03.25: 1. 开始date类型设计；
+            2. 完成date类型设计；
+            3. 修改DESC命令输出，使输出类型名变为大写；
 
-[![Coverage Status](https://codecov.io/gh/oceanbase/miniob/branch/main/graph/badge.svg)](https://codecov.io/gh/oceanbase/miniob)
+2024.03.26: 1. 在服务器断开连接后输出"Bye."；
 
-</div>
+2024.03.27: 1. 修改date类型，删除date_value_，共用int_value_；
+
+2024.03.28: 1. 开始实现DROP TABLE；
+            2. 完成DROP TABLE实现；
+
+2024.03.29: 1. 开始实现UPDATE；
+
+2024.03.30: 1. 完成UPDATE实现；
 
 # MiniOB 概述
 
-MiniOB 是 [OceanBase](https://github.com/oceanbase/oceanbase) 团队基于华中科技大学数据库课程原型，联合多所高校重新开发的、专为零基础的同学设计的数据库入门学习项目。我们的目标是为在校学生、数据库从业者、爱好者或对基础技术感兴趣的人提供一个友好的数据库学习项目。
-
+MiniOB 是 [OceanBase](https://github.com/oceanbase/oceanbase) 团队基于华中科技大学数据库课程原型，联合多所高校重新开发的、专为零基础的同学设计的数据库入门学习项目。我们的目标是为在校学生、数据库从业者、爱好者或对基础技术感兴趣的人提供一个友好的数据库学习项目
 MiniOB 整体代码简洁，容易上手，设计了一系列由浅入深的题目，帮助同学们从零基础入门，迅速了解数据库并深入学习数据库内核。MiniOB 简化了许多模块，例如不考虑并发操作、安全特性和复杂的事务管理等功能，以便更好地学习数据库实现原理。我们期望通过 MiniOB 的训练，同学们能够熟练掌握数据库内核模块的功能和协同关系，并具备一定的工程编码能力，例如内存管理、网络通信和磁盘 I/O 处理等, 这将有助于同学在未来的面试和工作中脱颖而出。
 
 # [文档](https://oceanbase.github.io/miniob/)
@@ -94,9 +103,6 @@ OceanBase 初赛基于一套适合初学者实践的数据库实训平台 MiniOB
 # Contributing
 
 OceanBase 社区热情欢迎每一位对数据库技术热爱的开发者，期待与您携手开启思维碰撞之旅。无论是文档格式调整或文字修正、问题修复还是增加新功能，都是参与和贡献 OceanBase 社区的方式之一。现在就开始您的首次贡献吧！更多详情，请参考 [社区贡献](CONTRIBUTING.md).
-
-# Contributors
-<a href="https://github.com/oceanbase/miniob/graphs/contributors"><img src="https://contributors-img.web.app/image?repo=oceanbase/miniob&width=890" /></a>
 
 # License
 
