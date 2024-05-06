@@ -77,7 +77,7 @@ public:
       }
       case DATES: {
         return common::compare_date((void *)v1, (void *)v2);
-      }
+      } break;
       default: {
         ASSERT(false, "unknown attr type. %d", attr_type_);
         return 0;
@@ -161,9 +161,9 @@ public:
         }
         return str;
       }
-      case DATES: {
+        case DATES: {
         return std::to_string(*(int *)v);
-      } break;    
+      } break;
       default: {
         ASSERT(false, "unknown attr type. %d", attr_type_);
       }

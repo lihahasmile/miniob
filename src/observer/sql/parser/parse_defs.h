@@ -34,10 +34,23 @@ class Expression;
  * Rel -> Relation
  * Attr -> Attribute
  */
+enum AggrOp
+{
+  AGGR_SUM,     ///< sum
+  AGGR_MAX,
+  AGGR_MIN,
+  AGGR_AVG,
+  AGGR_COUNT,
+  AGGR_COUNT_ALL,
+  AGGR_NONE     ///< no aggr
+};
+
 struct RelAttrSqlNode
 {
   std::string relation_name;   ///< relation name (may be NULL) 表名
   std::string attribute_name;  ///< attribute name              属性名
+  AggrOp      aggregation = AGGR_NONE;  ///<  aggregation (may be empty) 聚合操作
+  bool valid = true;  ///< 判断聚合操作是否合法
 };
 
 /**
@@ -257,14 +270,6 @@ struct ErrorSqlNode
  * @brief 表示一个SQL语句的类型
  * @ingroup SQLParser
  */
-/*
-  stmt.cpp内未出现的枚举值：
-  SCF_ERROR,
-  SCF_UPDATE,
-  SCF_DROP_INDEX,
-  SCF_SYNC,
-  SCF_CLOG_SYNC
-*/
 enum SqlCommandFlag
 {
   SCF_ERROR = 0,

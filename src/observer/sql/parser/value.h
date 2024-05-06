@@ -15,7 +15,6 @@ See the Mulan PSL v2 for more details. */
 #pragma once
 
 #include <string>
-#include "DateProcessor.h"
 
 /**
  * @brief 属性的类型
@@ -27,8 +26,8 @@ enum AttrType
   CHARS,          ///< 字符串类型
   INTS,           ///< 整数类型(4字节)
   FLOATS,         ///< 浮点数类型(4字节)
-  DATES,          ///< 日期类型
   BOOLEANS,       ///< boolean类型，当前不是由parser解析出来的，是程序内部使用的
+  DATES,
 };
 
 const char *attr_type_to_string(AttrType type);
@@ -52,7 +51,8 @@ public:
   explicit Value(float val);
   explicit Value(bool val);
   explicit Value(const char *s, int len = 0);
-  explicit Value(const char* date, int len, int flag);
+  //explicit Value(const char *date, int len, int flag);
+  explicit Value(int y, int m, int d);
 
   Value(const Value &other) = default;
   Value &operator=(const Value &other) = default;
@@ -69,8 +69,9 @@ public:
   void set_int(int val);
   void set_float(float val);
   void set_boolean(bool val);
-  void set_string(const char *s, int len = 0);
   void set_date(int val);
+  void set_date(int y,int m,int d);
+  void set_string(const char *s, int len = 0);
   void set_value(const Value &value);
 
   std::string to_string() const;
@@ -107,6 +108,11 @@ private:
     int int_value_;
     float float_value_;
     bool bool_value_;
+    int date_value_;
   } num_value_;
   std::string str_value_;
 };
+
+// bool is_leap_year(int year);
+// void strDate_to_intDate_(const char* strDate,int& intDate);
+// void intDate_to_strDate_(const int intDate,std::string& strDate);

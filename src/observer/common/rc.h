@@ -26,6 +26,7 @@ See the Mulan PSL v2 for more details. */
   DEFINE_RC(SQL_SYNTAX)                     \
   DEFINE_RC(INTERNAL)                       \
   DEFINE_RC(NOMEM)                          \
+  DEFINE_RC(UNIMPLEMENT)                    \
   DEFINE_RC(NOTFOUND)                       \
   DEFINE_RC(EMPTY)                          \
   DEFINE_RC(BUFFERPOOL_OPEN)                \

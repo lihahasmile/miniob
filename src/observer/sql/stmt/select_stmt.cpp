@@ -18,7 +18,6 @@ See the Mulan PSL v2 for more details. */
 #include "common/lang/string.h"
 #include "storage/db/db.h"
 #include "storage/table/table.h"
-#include <iostream>
 
 SelectStmt::~SelectStmt()
 {
@@ -28,12 +27,18 @@ SelectStmt::~SelectStmt()
   }
 }
 
-static void wildcard_fields(Table *table, std::vector<Field> &field_metas)
+static void wildcard_fields(Table *table, std::vector<Field> &field_metas,AggrOp aggregation=AggrOp::AGGR_NONE)
 {
   const TableMeta &table_meta = table->table_meta();
   const int field_num = table_meta.field_num();
   for (int i = table_meta.sys_field_num(); i < field_num; i++) {
-    field_metas.push_back(Field(table, table_meta.field(i)));
+    if(aggregation == AggrOp::AGGR_COUNT){
+      field_metas.push_back(Field(table, table_meta.field(i),AggrOp::AGGR_COUNT_ALL));
+      break;
+    }
+    else{
+      field_metas.push_back(Field(table, table_meta.field(i)));
+    }
   }
 }
 
@@ -66,12 +71,31 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
 
   // collect query fields in `select` statement
   std::vector<Field> query_fields;
+  bool have_aggregation_=false;
   for (int i = static_cast<int>(select_sql.attributes.size()) - 1; i >= 0; i--) {
     const RelAttrSqlNode &relation_attr = select_sql.attributes[i];
+    const AggrOp aggregation_ = relation_attr.aggregation;
+
+    if (aggregation_ != AggrOp::AGGR_NONE)
+    {
+      have_aggregation_ = true;
+    }
+
+    bool valid_ = relation_attr.valid;
+    if(!valid_)
+    {
+      return RC::INVALID_ARGUMENT;
+    }
 
     if (common::is_blank(relation_attr.relation_name.c_str()) &&
         0 == strcmp(relation_attr.attribute_name.c_str(), "*")) {
+        if(have_aggregation_ && aggregation_ != AggrOp::AGGR_COUNT){
+          return RC::INVALID_ARGUMENT;
+        }
       for (Table *table : tables) {
+        if(have_aggregation_)
+        wildcard_fields(table, query_fields,AggrOp::AGGR_COUNT);
+        else
         wildcard_fields(table, query_fields);
       }
 
@@ -120,7 +144,9 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
         return RC::SCHEMA_FIELD_MISSING;
       }
 
-      query_fields.push_back(Field(table, field_meta));
+      const AggrOp aggregation_=relation_attr.aggregation;
+
+      query_fields.push_back(Field(table, field_meta,aggregation_));
     }
   }
 
@@ -132,7 +158,6 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
   }
 
   // create filter statement in `where` statement
-
   FilterStmt *filter_stmt = nullptr;
   RC rc = FilterStmt::create(db,
       default_table,

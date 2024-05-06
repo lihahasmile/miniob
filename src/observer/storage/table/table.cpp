@@ -126,44 +126,6 @@ RC Table::create(int32_t table_id,
   return rc;
 }
 
-RC Table::drop(const char* dir) 
-{
-    RC rc = sync();
-
-    if (rc != RC::SUCCESS) return rc;
-
-    // 删除数据文件
-    std::string data_file = std::string(dir) + "/" + name() + ".data";
-    if (unlink(data_file.c_str()) != 0) 
-    {
-        LOG_ERROR("Failed to remove data file=%s, errno=%d", data_file.c_str(), errno);
-        return RC::UNIMPLENMENT;
-    }
-
-    // 删除元数据文件
-    std::string table_file = std::string(dir) + "/" + name() + ".table";
-    if (unlink(table_file.c_str()) != 0) 
-    {
-        LOG_ERROR("Failed to remove table meta file=%s, errno=%d", table_file.c_str(), errno);
-        return RC::UNIMPLENMENT;
-    }
-
-    // 删除索引文件
-    const int index_num = table_meta_.index_num();
-    for (int i = 0; i < index_num; i++) 
-    {
-        const IndexMeta* index_meta = table_meta_.index(i);
-        std::string index_file = std::string(dir) + "/" + name() + "-" + index_meta->name() + ".index";
-        if (unlink(index_file.c_str()) != 0) 
-        {
-            LOG_ERROR("Failed to remove index file=%s, errno=%d", index_file.c_str(), errno);
-            return RC::UNIMPLENMENT;
-        }
-    }
-
-    return RC::SUCCESS;
-}
-
 RC Table::open(const char *meta_file, const char *base_dir)
 {
   // 加载元数据文件
@@ -269,17 +231,6 @@ RC Table::get_record(const RID &rid, Record &record)
 
   record.set_data_owner(record_data, record_size);
   return rc;
-}
-
-RC Table::update_record(Record& record, Value& value, int offset) 
-{
-  RC rc = RC::SUCCESS;
-  rc = record_handler_->update_record(offset, value, &record.rid());
-  if (rc != RC::SUCCESS) 
-  {
-    LOG_ERROR("Update record failed. table name=%s, rc=%s", table_meta_.name(), strrc(rc));
-    return rc;
-  }
 }
 
 RC Table::recover_insert_record(Record &record)
