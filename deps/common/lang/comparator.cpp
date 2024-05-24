@@ -59,6 +59,33 @@ int compare_string(void *arg1, int arg1_max_length, void *arg2, int arg2_max_len
   }
   return 0;
 }
+int compare_str_with_int(void *arg1,int arg1_max_length,void *arg2)
+{
+    // 将 void* 转换为 char*  
+    char *str = static_cast<char*>(arg1);  
+    int v2 = *(int *)arg2;
+    // 注意：这里假设字符串表示的是整数，并且没有范围溢出  
+    int num = std::atoi(str); 
+
+    // 现在可以比较 num 和 arg2 了  
+    if (num < v2) return -1;  
+    if (num > v2) return 1;  
+    return 0; // 相等  
+}
+int compare_str_with_float(void *arg1,int arg1_max_length,void *arg2)
+{
+  // 将 void* 转换为 char*  
+    char *str = static_cast<char*>(arg1);  
+    float v2 = *(float *)arg2;
+    
+    float num = std::atof(str);  
+      
+    // 现在可以比较 num 和 arg2 了  
+    if (num < v2) return -1;  
+    if (num > v2) return 1;  
+    return 0; // 相等 
+}
+
 int compare_date(void *arg1, void *arg2)
 {
   return compare_int(arg1,arg2);
